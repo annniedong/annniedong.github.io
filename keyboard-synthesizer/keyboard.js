@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     const adsr = {
         attack: 0.01,
         decay: 0.1,
-        sustain: 0.,
+        sustain: 0.6,
         release: 0.2
     };
 
