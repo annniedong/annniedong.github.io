@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap" rel="stylesheet">
 
 
-    <title>Advanced Synthesizer</title>
+    <title>Keyboard Synthesizer</title>
     <style>
         * {
             margin: 0;
@@ -56,10 +56,10 @@
         }
 
         @keyframes rotateRainbow {
-            0%, 100% { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
-            50%      { transform: translate(-50%, -50%) rotate(180deg) scale(1.05); }
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to   { transform: translate(-50%, -50%) rotate(360deg); }
         }
-
+        
         body::after {
             content: '';
             position: fixed;
