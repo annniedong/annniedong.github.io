@@ -281,7 +281,7 @@
       margin-bottom: 10px;
     }
 
-    input, select, textarea {
+    input:not([type="radio"]), select, textarea {
       width: 100%;
       background: transparent;
       border: none;
@@ -295,7 +295,7 @@
       -webkit-appearance: none;
     }
 
-    input:focus, select:focus, textarea:focus {
+    input:not([type="radio"]):focus, select:focus, textarea:focus {
       border-bottom-color: var(--green);
     }
 
@@ -336,13 +336,33 @@
     }
 
     .radio-option input[type="radio"] {
-      width: 14px;
-      height: 14px;
+      appearance: none;
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
       border: 1px solid var(--dim);
-      border-bottom: 1px solid var(--dim);
       flex-shrink: 0;
       padding: 0;
-      accent-color: var(--green);
+      cursor: pointer;
+      position: relative;
+      background: transparent;
+      transition: all 0.2s;
+    }
+
+    .radio-option input[type="radio"]:checked {
+      background: var(--green);
+      border-color: var(--green);
+    }
+
+    .radio-option input[type="radio"]:checked::after {
+      content: '✓';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #000;
+      font-size: 11px;
+      font-weight: 700;
     }
 
     .radio-option span {
