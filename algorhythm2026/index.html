@@ -719,14 +719,14 @@
           <span>Yes (PLS PICK THIS IF U KNOW HOW TO. WE WANT TO HEAR U PLAY.)</span>
         </label>
         <label class="radio-option">
-          <input type="radio" name="livecode" value="no" checked />
+          <input type="radio" name="livecode" value="no" />
           <span>No</span>
         </label>
       </div>
 
       <div class="field">
         <label for="name">Name</label>
-        <input type="text" id="name" placeholder="Nina Jirashi" required />
+        <input type="text" id="name" placeholder="Nina Jirachi" required />
       </div>
 
       <div class="field">
@@ -735,13 +735,13 @@
       </div>
 
       <div class="field">
-        <label for="name">How many people would we need to sign into EC?</label>
-        <input type="text" id="name" placeholder="including yourself and/or any friends" required />
+        <label for="signIn">How many people would we need to sign into EC?</label>
+        <input type="text" id="signIn" placeholder="including yourself and/or any friends" required />
       </div>
 
       <div class="field">
         <label for="note">Anything you want to help with?</label>
-        <input id="note" placeholder="bartending, visuals, setup ..."></input>
+        <input id="note" placeholder="bartending, visuals, setup, sign-ins ..."></input>
       </div>
 
       <button class="submit-btn" onclick="handleSubmit()">Confirm RSVP →</button>
@@ -775,32 +775,40 @@
     updateCountdown();
 
     // Form submit
-  function handleSubmit() {
-    const name = document.getElementById('name').value.trim();
-    if (!name) {
-      document.getElementById('name').style.borderBottomColor = '#ff2244';
-      return;
+    function handleSubmit() {
+      const name = document.getElementById('name').value.trim();
+      if (!name) {
+        document.getElementById('name').style.borderBottomColor = '#ff2244';
+        return;
+      }
+      document.getElementById('name').style.borderBottomColor = '';
+
+      const payload = {
+        name,
+        handle: document.getElementById('handle').value.trim(),
+        livecode: document.querySelector('input[name="livecode"]:checked')?.value,
+        signIn: document.getElementById('signIn').value.trim(),
+        note: document.getElementById('note').value.trim()
+      };
+
+      // Debug: log the payload
+      console.log('Sending payload:', payload);
+
+        fetch('https://script.google.com/macros/s/AKfycbznX9n0KamJnssj5oJQI-VD40_vSYrvLvfm-lkg0CxNCVISB1CfynERGMeYE0R2aX_w/exec', {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(() => {
+        console.log('Request sent successfully');
+        document.getElementById('success').classList.add('active');
+      })
+      .catch(error => {
+        console.error('Error submitting form:', error);
+        alert('There was an error submitting your RSVP. Please try again or contact the hosts.');
+      });
     }
-    document.getElementById('name').style.borderBottomColor = '';
-
-    const payload = {
-      name,
-      handle: document.getElementById('handle').value.trim(),
-      livecode: document.querySelector('input[name="livecode"]:checked')?.value,
-      signIn: document.querySelector('input[name="level"]:checked')?.value,
-      note: document.getElementById('note').value.trim()
-    };
-
-  fetch('https://script.google.com/a/macros/columbia.edu/s/AKfycbzFwP1j9zicXSfyY9sFelkaRMJpJcF1D33Z5iG7vVYDZvL_64F01ZVmfwRqEsMb4ePX/exec', {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  });
-
-    document.getElementById('success').classList.add('active');
-  }
-
   </script>
 </body>
 </html>
