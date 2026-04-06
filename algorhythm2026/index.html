@@ -2,8 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <title>ALGORHYTHM // RSVP</title>
+  <link rel="icon" type="image/png" href="lily.png">
+  <link rel="apple-touch-icon" href="lily.png">
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Unbounded:wght@900&family=Fragment+Mono&display=swap" rel="stylesheet"/>
   <style>
     :root {
@@ -30,6 +32,7 @@
       min-height: 100vh;
       overflow-x: hidden;
       cursor: crosshair;
+      -webkit-tap-highlight-color: transparent;
     }
 
     /* Scanline overlay */
@@ -244,10 +247,6 @@
       min-height: 600px;
     }
 
-    @media(max-width:768px) {
-      .form-section { grid-template-columns: 1fr; }
-    }
-
     .form-left {
       padding: 60px 40px;
       background: var(--surface); 
@@ -387,6 +386,7 @@
       transition: all 0.2s;
       position: relative;
       overflow: hidden;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .submit-btn::before {
@@ -407,6 +407,66 @@
     }
 
     .submit-btn:active { transform: translateY(0); }
+
+    /* Calendar button */
+    .calendar-btn {
+      display: block;
+      width: 100%;
+      margin-top: 16px;
+      padding: 14px 32px;
+      background: transparent;
+      color: var(--green);
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      border: 1px solid var(--green);
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+      text-decoration: none;
+      text-align: center;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .calendar-btn:hover {
+      background: rgba(255, 108, 238, 0.1);
+      box-shadow: 0 0 20px rgba(255, 108, 238, 0.2);
+    }
+
+    .calendar-btn:active {
+      transform: scale(0.98);
+    }
+
+    .calendar-options {
+      display: none;
+      margin-top: 12px;
+      gap: 8px;
+    }
+
+    .calendar-options.active {
+      display: flex;
+      flex-direction: column;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .cal-option {
+      padding: 12px 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--white);
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      text-decoration: none;
+      text-align: center;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .cal-option:hover {
+      border-color: var(--green);
+      background: rgba(255, 108, 238, 0.05);
+    }
 
     /* Info right side */
     .info-block {
@@ -475,6 +535,16 @@
     .speaker-handle {
       font-size: 10px;
       color: var(--mid);
+    }
+
+    .speaker-handle a {
+      color: var(--mid);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .speaker-handle a:hover {
+      color: var(--green);
     }
 
     /* Footer */
@@ -559,7 +629,7 @@
       font-size: 12px;
       color: var(--mid);
       letter-spacing: 0.1em;
-      margin-bottom: 48px;
+      margin-bottom: 32px;
       max-width: 400px;
     }
 
@@ -594,13 +664,236 @@
       100%{text-shadow:none}
     }
 
-    /* Responsive */
+    /* Responsive - Tablet */
+    @media(max-width:768px) {
+      .form-section {
+        grid-template-columns: 1fr;
+      }
+      
+      .form-left {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+      
+      .hero h1 {
+        font-size: clamp(36px, 10vw, 80px);
+      }
+      
+      .hero-meta {
+        grid-template-columns: 1fr;
+      }
+      
+      .meta-item {
+        border-left: 1px solid var(--border);
+        border-top: none;
+      }
+      
+      .meta-item:first-child {
+        border-top: 1px solid var(--border);
+      }
+      
+      .countdown {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      
+      .count-block {
+        flex: 1 1 calc(50% - 1px);
+        border-right: 1px solid var(--dim);
+        min-width: 120px;
+      }
+      
+      .count-block:nth-child(even) {
+        border-right: 1px solid var(--dim);
+      }
+      
+      .radio-option {
+        padding: 16px;
+      }
+      
+      .radio-option span {
+        font-size: 13px;
+        line-height: 1.4;
+      }
+      
+      .radio-option input[type="radio"] {
+        width: 18px;
+        height: 18px;
+      }
+      
+      input:not([type="radio"]), select, textarea {
+        font-size: 16px; /* Prevents zoom on iOS */
+        padding: 14px 0;
+      }
+      
+      .submit-btn {
+        padding: 22px 32px;
+        font-size: 12px;
+      }
+    }
+    
+    /* Mobile */
     @media(max-width:640px) {
-      header { padding: 16px 20px; }
-      .hero { padding: 48px 20px 40px; }
-      .form-left, .form-right { padding: 40px 20px; }
-      .countdown-section { padding: 28px 20px; }
-      footer { padding: 16px 20px; flex-direction: column; gap: 8px; }
+      header { 
+        padding: 16px 20px;
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+      }
+      
+      .logo {
+        font-size: 10px;
+      }
+      
+      .status-bar {
+        font-size: 9px;
+      }
+      
+      .hero { 
+        padding: 48px 20px 40px; 
+      }
+      
+      .hero-bg-text {
+        font-size: clamp(80px, 30vw, 180px);
+        right: -10px;
+        top: 0;
+      }
+      
+      .event-tag {
+        font-size: 8px;
+        padding: 6px 10px;
+      }
+      
+      .hero h1 {
+        margin-bottom: 32px;
+      }
+      
+      .form-left, .form-right { 
+        padding: 40px 20px; 
+      }
+      
+      .countdown-section { 
+        padding: 28px 20px; 
+      }
+      
+      .countdown {
+        gap: 0;
+      }
+      
+      .count-block {
+        padding: 14px 12px;
+        min-width: calc(50% - 1px);
+      }
+      
+      .count-num {
+        font-size: 28px;
+      }
+      
+      .count-label {
+        font-size: 8px;
+      }
+      
+      .section-title {
+        font-size: 10px;
+        margin-bottom: 24px;
+      }
+      
+      .field {
+        margin-bottom: 24px;
+      }
+      
+      label {
+        font-size: 8px;
+      }
+      
+      .info-block h3 {
+        font-size: 9px;
+      }
+      
+      .stack-list {
+        gap: 8px;
+      }
+      
+      .stack-list li {
+        font-size: 11px;
+        text-transform: none;
+        line-height: 1.6;
+      }
+      
+      .speaker-card {
+        padding: 14px;
+        gap: 12px;
+      }
+      
+      .speaker-avatar {
+        width: 36px;
+        height: 36px;
+        font-size: 11px;
+      }
+      
+      .speaker-name {
+        font-size: 12px;
+      }
+      
+      .speaker-handle {
+        font-size: 9px;
+      }
+      
+      footer { 
+        padding: 24px 20px;
+        flex-direction: column; 
+        gap: 12px;
+        text-align: center;
+      }
+      
+      .ticker-inner {
+        font-size: 9px;
+      }
+      
+      .success-title {
+        font-size: clamp(28px, 8vw, 56px);
+      }
+      
+      .success-sub {
+        font-size: 11px;
+      }
+      
+      .close-btn {
+        font-size: 9px;
+        padding: 12px 20px;
+      }
+    }
+    
+    /* Very small screens */
+    @media(max-width:375px) {
+      .hero h1 {
+        font-size: 32px;
+      }
+      
+      .meta-value {
+        font-size: 12px;
+      }
+      
+      .count-num {
+        font-size: 24px;
+      }
+      
+      .count-block {
+        padding: 12px 8px;
+      }
+      
+      .radio-option {
+        padding: 14px 12px;
+      }
+      
+      .radio-option span {
+        font-size: 11px;
+      }
+      
+      .submit-btn {
+        font-size: 10px;
+        padding: 18px 24px;
+      }
     }
   </style>
 </head>
@@ -611,7 +904,14 @@
     <div class="success-code">RSVP_CONFIRMED.exe</div>
     <div class="success-title">YOU'RE<br><span>IN.</span></div>
     <p class="success-sub">See you in the terminal XOXO</p>
-    <button class="close-btn" onclick="document.getElementById('success').classList.remove('active')">← Back</button>
+    
+    <button class="calendar-btn" onclick="toggleCalendarOptions(event)" type="button" style="max-width: 300px; margin: 0 auto 16px;">+ Add to Calendar</button>
+    <div class="calendar-options" id="calendarOptions" style="max-width: 300px; margin: 0 auto;">
+      <a href="#" class="cal-option" onclick="addToGoogleCalendar(event)">Google Calendar</a>
+      <a href="#" class="cal-option" onclick="addToAppleCalendar(event)">Apple Calendar</a>
+    </div>
+    
+    <button class="close-btn" onclick="document.getElementById('success').classList.remove('active')" style="margin-top: 24px;">← Back</button>
   </div>
 
   <!-- Header -->
@@ -686,14 +986,14 @@
           <div class="speaker-avatar">AD</div>
           <div>
             <div class="speaker-name">Annie Dong</div>
-            <div class="speaker-handle">@annniedong on instagram</div>
+            <div class="speaker-handle"><a href="https://instagram.com/annniedong" target="_blank" rel="noopener">@annniedong on instagram</a></div>
           </div>
         </div>
         <div class="speaker-card">
           <div class="speaker-avatar">KX</div>
           <div>
             <div class="speaker-name">Kathy Xu</div>
-            <div class="speaker-handle">@kathyzxu on instagram</div>
+            <div class="speaker-handle"><a href="https://instagram.com/kathyzxu" target="_blank" rel="noopener">@kathyzxu on instagram</a></div>
           </div>
         </div>
       </div>
@@ -794,7 +1094,7 @@
       // Debug: log the payload
       console.log('Sending payload:', payload);
 
-        fetch('https://script.google.com/macros/s/AKfycbznX9n0KamJnssj5oJQI-VD40_vSYrvLvfm-lkg0CxNCVISB1CfynERGMeYE0R2aX_w/exec', {
+      fetch('https://script.google.com/macros/s/AKfycbznX9n0KamJnssj5oJQI-VD40_vSYrvLvfm-lkg0CxNCVISB1CfynERGMeYE0R2aX_w/exec', {
         method: 'POST',
         mode: 'no-cors',
         headers: { 'Content-Type': 'application/json' },
@@ -808,6 +1108,64 @@
         console.error('Error submitting form:', error);
         alert('There was an error submitting your RSVP. Please try again or contact the hosts.');
       });
+    }
+
+    // Calendar functions
+    function toggleCalendarOptions(event) {
+      event.preventDefault();
+      const options = document.getElementById('calendarOptions');
+      options.classList.toggle('active');
+    }
+
+    function toggleSuccessCalendar(event) {
+      event.preventDefault();
+      const options = document.getElementById('successCalendarOptions');
+      options.classList.toggle('active');
+    }
+
+    function addToGoogleCalendar(event) {
+      event.preventDefault();
+      const title = 'ALGORHYTHM Livecoding Party';
+      const startDate = '20260501T210000'; // May 1, 2026, 9:00 PM
+      const endDate = '20260502T000000';   // May 2, 2026, 12:00 AM (midnight)
+      const details = 'A livecoding party for students to code music together. Feel free to bring friends!';
+      const location = 'East Campus 1220, 70 Morningside Dr., New York, NY 10027';
+      
+      const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${startDate}/${endDate}&details=${encodeURIComponent(details)}&location=${encodeURIComponent(location)}`;
+      
+      window.open(url, '_blank');
+    }
+
+    function addToAppleCalendar(event) {
+      event.preventDefault();
+      
+      // Create ICS file content
+      const icsContent = `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//ALGORHYTHM//Livecoding Party//EN
+BEGIN:VEVENT
+DTSTART:20260501T210000
+DTEND:20260502T000000
+SUMMARY:ALGORHYTHM Livecoding Party
+DESCRIPTION:A livecoding party for students to code music together. Feel free to bring friends!
+LOCATION:East Campus 1220, 70 Morningside Dr., New York, NY 10027
+STATUS:CONFIRMED
+BEGIN:VALARM
+TRIGGER:-PT1H
+ACTION:DISPLAY
+DESCRIPTION:ALGORHYTHM Livecoding Party starts in 1 hour
+END:VALARM
+END:VEVENT
+END:VCALENDAR`;
+
+      // Create blob and download
+      const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = 'algorhythm-party.ics';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     }
   </script>
 </body>
