@@ -23,9 +23,15 @@ Install it:
 npm i jsfxr
 ```
 
-Require it:
+Import it (ES Modules / Bundlers):
 
+```javascript
+import { sfxr } from "jsfxr";
 ```
+
+Or require it (CommonJS):
+
+```javascript
 const sfxr = require("jsfxr").sfxr;
 ```
 
@@ -47,7 +53,7 @@ You can then directly use the `sfxr` namespace without requiring it.
 Generate a sound effect using a preset algorithm and play it using webaudio API.
 
 ```javascript
-const sfxr = require("jsfxr").sfxr;
+import { sfxr } from "jsfxr"; // or const sfxr = require("jsfxr").sfxr;
 
 const preset = "pickupCoin";
 const sound = sfxr.generate(preset);
