@@ -41,13 +41,18 @@
   ],
   "devDependencies": {
     "@playwright/test": "^1.57.0",
+    "express": "^4.22.2",
     "live-server": "1.2.1",
     "tape": "5.6.1"
   },
   "scripts": {
+    "dev": "node server.js",
     "serve": "live-server",
     "test": "./tests.js",
     "test:e2e": "playwright test"
+  },
+  "engines": {
+    "node": ">=18"
   },
   "files": [
     "sfxr.js",

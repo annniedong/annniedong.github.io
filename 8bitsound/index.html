@@ -6,6 +6,7 @@
 <title>SFX Studio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<script src="config.js"></script>
 <script src="riffwave.js"></script>
 <script src="sfxr.js"></script>
 <script>
@@ -218,6 +219,12 @@ async function sendChat() {
   const text    = input.value.trim();
   if (!text) return;
 
+  const apiKey = window.OPENAI_API_KEY;
+  if (!apiKey || apiKey === 'your-openai-api-key-here') {
+    chatAppend('ai', 'ERROR: Add your OpenAI API key to config.js to use the AI assistant.');
+    return;
+  }
+
   input.value = '';
   chatAppend('user', text);
   chatHistory.push({ role: 'user', content: text });
@@ -226,22 +233,61 @@ async function sendChat() {
   sendBtn.textContent = '···';
   const loading = chatAppend('ai', '···');
 
-  try {
-    const res = await fetch('/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: chatHistory }),
-    });
-    const data = await res.json();
-    if (!res.ok) { loading.textContent = 'ERROR: ' + (data.error || 'API error'); return; }
+  const system = `You are an 8-bit sound design AI for a retro game sound effects studio.
+Users describe sounds they want. Pick the best preset and write a short energetic message.
 
-    const sound   = data.sound   || 'random';
-    const message = data.message || 'Generating ' + sound + '...';
+Available presets:
+- pickupCoin    : collecting items, coins, rewards, treasure
+- laserShoot    : lasers, shooting, projectiles, zaps
+- explosion     : explosions, blasts, crashes, booms
+- powerUp       : power-up, level-up, achievement, buff
+- hitHurt       : taking damage, collision, pain, ouch
+- jump          : jumping, bouncing, hopping, leaping
+- click         : UI click, button press, menu select
+- blipSelect    : cursor move, blip, beep, menu navigation
+- synth         : melodic tones, music, synth, chime
+- tone          : pure tones, signal, ping, notification
+- random        : anything unexpected or truly random
+
+Respond ONLY with valid JSON:
+{
+  "sound": "<preset>",
+  "mutate": false,
+  "message": "<max 15 words, energetic, 8-bit flavored>"
+}
+
+Set "mutate": true only if user says variation/mutate/different version of current.`;
+
+  try {
+    const res = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + apiKey,
+      },
+      body: JSON.stringify({
+        model: 'gpt-4o-mini',
+        messages: [
+          { role: 'system', content: system },
+          ...chatHistory.slice(-6),
+        ],
+        max_tokens: 120,
+        temperature: 0.7,
+        response_format: { type: 'json_object' },
+      }),
+    });
+
+    const data = await res.json();
+    if (!res.ok) { loading.textContent = 'ERROR: ' + (data.error?.message || 'API error'); return; }
+
+    const parsed  = JSON.parse(data.choices[0].message.content);
+    const sound   = parsed.sound   || 'random';
+    const message = parsed.message || 'Generating ' + sound + '...';
     loading.textContent = message;
-    chatHistory.push({ role: 'assistant', content: JSON.stringify(data) });
-    data.mutate ? mut() : gen(sound);
+    chatHistory.push({ role: 'assistant', content: JSON.stringify(parsed) });
+    parsed.mutate ? mut() : gen(sound);
   } catch (e) {
-    loading.textContent = 'ERROR: Could not reach AI.';
+    loading.textContent = 'ERROR: Could not reach OpenAI API.';
   } finally {
     sendBtn.disabled    = false;
     sendBtn.textContent = '▶';
